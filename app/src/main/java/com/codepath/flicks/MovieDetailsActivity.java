@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView tvTitle;
     TextView tvOverview;
     RatingBar rbVoteAverage;
+    ImageView ivTrailer;
 
     //instance fields
     AsyncHttpClient client;
@@ -48,6 +50,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
+        ivTrailer = (ImageView) findViewById(R.id.ivBackdrop);
 
         //retrieve movie
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
@@ -55,6 +58,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
+//        String imageUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
+//        int placeholderId = R.drawable.flicks_backdrop_placeholder;
+//        //load image
+//        Glide.with(this)
+//                .load(imageUrl)
+//                .placeholder(placeholderId)
+//                .error(placeholderId)
+//                .bitmapTransform(new RoundedCornersTransformation(this, 15, 0))
+//                .into(ivTrailer);
 
         //have to divide by 2 because average is 0..10
         float voteAverage = Float.parseFloat(movie.getVoteAverage());
