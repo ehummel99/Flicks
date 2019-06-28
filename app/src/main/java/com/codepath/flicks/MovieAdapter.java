@@ -1,6 +1,7 @@
 package com.codepath.flicks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.flicks.models.Config;
 import com.codepath.flicks.models.Movie;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -90,7 +93,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     //create the viewholder as static inner class
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //track view objects
         ImageView ivPoster;
@@ -104,7 +107,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             ivBackdrop = (ImageView) itemView.findViewById(R.id.ivBackdrop);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvOverview = (TextView) itemView.findViewById(R.id.tvOverview);
+            itemView.setOnClickListener(this);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            //get position of movie clicked
+            int position = getAdapterPosition();
+            //get movie at the position
+            Movie movie = movies.get(position);
+            //create new intent
+            Intent intent = new Intent(context, MovieDetailsActivity.class);
+            //pass movie
+            intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+            //show the activity
+            context.startActivity(intent);
         }
     }
 }
