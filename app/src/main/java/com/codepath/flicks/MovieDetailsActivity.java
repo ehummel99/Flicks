@@ -51,6 +51,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
         ivTrailer = (ImageView) findViewById(R.id.ivBackdrop);
+        //initialize client
+        client = new AsyncHttpClient();
 
         //retrieve movie
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
@@ -73,10 +75,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         rbVoteAverage.setRating(voteAverage = voteAverage > 0 ? voteAverage / 2.0f : voteAverage);
     }
 
-    private void getMovieId() {
+    public void getMovieId(View view) {
         String url = API_BASE_URL + "/movie/" + movie.getId() + "/videos\n";
         RequestParams params = new RequestParams();
-        params.put(API_KEY_PARAM, getString(R.string.api_key));
+        params.put(API_KEY_PARAM, getString(R.string.youtube_api_key));
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -97,31 +99,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 logError("Failed to get data from now playing endpoint", throwable, true);
-            }
-        });
-    }
-
-    public void getTrailerConfig(View view) {
-        String url = API_BASE_URL + "/configuration";
-        RequestParams params = new RequestParams();
-        params.put(API_KEY_PARAM, getString(R.string.api_key));
-        //execute GET request -> JSON response
-        client.get(url, params, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                //get image base url and poster size
-                try {
-                    config = new Config(response);
-                    Log.i("MovieDetailsActivity", "Loaded configuration");
-                    getMovieId();
-                } catch (JSONException e) {
-                    logError("Failed parsing configuration", e, true);
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                logError("Failed getting configuration", throwable, true);
             }
         });
     }
