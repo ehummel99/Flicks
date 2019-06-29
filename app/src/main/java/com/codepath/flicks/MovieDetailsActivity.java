@@ -10,6 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.codepath.flicks.models.Config;
 import com.codepath.flicks.models.Movie;
 import com.codepath.flicks.models.MovieTrailerActivity;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -50,25 +52,26 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
-        ivTrailer = (ImageView) findViewById(R.id.ivBackdrop);
+        ivTrailer = (ImageView) findViewById(R.id.ivTrailer);
         //initialize client
         client = new AsyncHttpClient();
 
         //retrieve movie
         movie = (Movie) Parcels.unwrap(getIntent().getParcelableExtra(Movie.class.getSimpleName()));
+        config = (Config) Parcels.unwrap(getIntent().getParcelableExtra("IMAGE_URL"));
         Log.d("MovieDetailActivity", String.format("Showing details for '%s'", movie.getTitle()));
 
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
-//        String imageUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
-//        int placeholderId = R.drawable.flicks_backdrop_placeholder;
-//        //load image
-//        Glide.with(this)
-//                .load(imageUrl)
-//                .placeholder(placeholderId)
-//                .error(placeholderId)
-//                .bitmapTransform(new RoundedCornersTransformation(this, 15, 0))
-//                .into(ivTrailer);
+        String imageUrl = config.getImageUrl(config.getBackdropSize(), movie.getBackdropPath());
+        int placeholderId = R.drawable.flicks_backdrop_placeholder;
+        //load image
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(placeholderId)
+                .error(placeholderId)
+                .bitmapTransform(new RoundedCornersTransformation(this, 15, 0))
+                .into(ivTrailer);
 
         //have to divide by 2 because average is 0..10
         float voteAverage = Float.parseFloat(movie.getVoteAverage());

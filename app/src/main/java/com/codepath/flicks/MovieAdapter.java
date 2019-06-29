@@ -121,6 +121,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             Intent intent = new Intent(context, MovieDetailsActivity.class);
             //pass movie
             intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+            intent.putExtra("IMAGE_URL", Parcels.wrap(config));
             //show the activity
             context.startActivity(intent);
         }

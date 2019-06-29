@@ -3,7 +3,9 @@ package com.codepath.flicks.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 public class Config {
 
     //fields
@@ -13,6 +15,9 @@ public class Config {
     String posterSize;
     //backdrop size
     String backdropSize;
+
+    //for Parceler
+    public Config() {}
 
     public Config(JSONObject object) throws JSONException {
         JSONObject images = object.getJSONObject("images");
